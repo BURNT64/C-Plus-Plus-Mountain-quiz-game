@@ -13,7 +13,7 @@ int main()
     cout << "---------------------------------------------------------------\n";
     cout << "Guess the random mountain!!!! Created by Will Allwood 2022-2023\n";
     cout << "---------------------------------------------------------------\n\n";
-    cout << "Welcome to the game!\n\n";
+    cout << "Welcome to the Mountain game!\n\n";
     cout << "You will be repeatedly presented with random mountain names and must guess which of four mountain ranges it is in\n\n";
 
     string UserResponse;

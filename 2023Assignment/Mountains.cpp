@@ -44,16 +44,10 @@ Mountains::Mountains(std::vector<std::string>& filenames)
 
 std::string Mountains::getRandomMountain()
 {
-    static bool seeded = false;
-    // seed the random number generator if it has not been seeded yet
-    if (!seeded)
-    {
-        srand(0); // seed the generator with a fixed value
-        seeded = true; // set the seeded flag to true to prevent reseeding
-    }
-    // generate a random index within the range of the mountain names vector
-    int randomIndex = rand() % mountains.size();
-    // return the mountain name at the random index
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+    std::uniform_int_distribution<int> dis(0, mountains.size() - 1);
+    int randomIndex = dis(gen);
     return mountains[randomIndex];
 }
 

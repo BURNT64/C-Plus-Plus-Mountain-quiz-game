@@ -6,6 +6,7 @@
 #include <vector>
 #include <algorithm>
 #include <thread>
+
 using namespace std;
 
 int main()
@@ -16,8 +17,12 @@ int main()
     cout << "Welcome to the Mountain game!\n\n";
     cout << "You will be repeatedly presented with random mountain names and must guess which of four mountain ranges it is in\n\n";
 
+    string playerName;
+    cout << "Please enter your name: ";
+    cin >> playerName;
+
     string UserResponse;
-    cout << "Are you ready to take the quiz?\n\n"
+    cout << "\nAre you ready to take the quiz " << playerName << "?\n\n"
         "yes/no" << endl;
     cin >> UserResponse;
 
@@ -49,8 +54,11 @@ int main()
     int questions = 0; // keep track of the number of questions asked
     std::string mountain; // mountain name
     std::string range; // mountain range
-
     std::vector<std::pair<std::string, double>> correct_answers; // keep track of correct answers and their response times
+
+    std::atomic<bool> timed_out(false); // flag to indicate if the user has timed out
+
+    
 
     while (true)
     {
@@ -59,6 +67,7 @@ int main()
         std::cout << "Which range is " << mountain << " in? (A, C, I, or P) ";
 
         // measure response time
+
         auto start = std::chrono::high_resolution_clock::now();
         std::cin >> range;
         auto end = std::chrono::high_resolution_clock::now();
@@ -105,6 +114,7 @@ int main()
     std::cout << "\n\n\n";
     std::cout << "Results:\n";
     std::cout << "----------------------------------------\n";
+    std::cout << "Player Name: " << playerName << "\n";
     std::cout << "Total questions asked: " << questions << "\n";
     std::cout << "Total correct answers: " << score << "\n";
     std::cout << "Percentage correct: " << (double)score / questions * 100 << "%\n";
@@ -120,6 +130,16 @@ int main()
     for (auto& answer : correct_answers) {
         std::cout << answer.first << ": " << answer.second << " seconds\n";
     }
+    std::cout << "----------------------------------------\n";
+
+    std::ofstream outputFile;
+    outputFile.open("results.csv");
+    outputFile << "Mountain,Response Time,Player name\n";
+    for (auto answer : correct_answers) {
+        outputFile << answer.first << "," << answer.second << "," << playerName << "\n";
+    }
+    outputFile.close();
+
 
     std::cout << "\nThank you for playing" << endl;
 

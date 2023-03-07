@@ -11,44 +11,24 @@ using namespace std;
 
 Mountains::Mountains(std::vector<std::string>& filenames)
 {
-    // Iterate through the filenames vector using a range-based for loop
     for (const std::string& filename : filenames)
     {
         std::ifstream file(filename);
         std::string line;
 
+        // Extract the range name from the filename
+        std::string rangeName = filename.substr(0, filename.find(".txt"));
+
+        // Add an empty vector for the current range to the mountainRanges map
+        mountainRanges[rangeName] = std::vector<std::string>();
+
         while (std::getline(file, line))
         {
-            // Check the value of filename and add the line string to the appropriate
-            // mountain range vector
-            // add all mountains to a map 
+            // Add the line string to the appropriate range-specific vector
+            mountainRanges[rangeName].push_back(line);
 
-            if (filename == "Alps.txt")
-                Alps.push_back(line);
-
-            if (filename == "Carpathians.txt")
-                Carpathians.push_back(line);
-
-            if (filename == "Icelandic Highlands.txt")
-                Icelandic_Highlands.push_back(line);
-
-            if (filename == "Pyrenees.txt")
-                Pyrenees.push_back(line);
-
-            // Add the line string to the "mountains" vector, which contains all of the
-            // mountains from all of the mountain range files
+            // Add the line string to the "mountains" vector
             mountains.push_back(line);
-
-            // Add an entry to the mountainRanges map that associates the mountain
-            // with its corresponding range
-            if (filename == "Alps.txt")
-                mountainRanges[line] = "Alps";
-            else if (filename == "Carpathians.txt")
-                mountainRanges[line] = "Carpathians";
-            else if (filename == "Icelandic Highlands.txt")
-                mountainRanges[line] = "Icelandic Highlands";
-            else if (filename == "Pyrenees.txt")
-                mountainRanges[line] = "Pyrenees";
         }
         file.close();
     }
@@ -66,10 +46,10 @@ std::string Mountains::getRandomMountain()
 bool Mountains::checkRange(std::string mountain, std::string range)
 {
     // Look up the range associated with the given mountain in the mountainRanges map
-    auto it = mountainRanges.find(mountain);
+    auto it = mountainRanges.find(range);
     if (it == mountainRanges.end())
-        return false; // The given mountain does not exist in any of the ranges
+        return false; // The given range does not exist
 
-    // Check whether the range associated with the given mountain matches the given range
-    return it->second == range;
+    // Check whether the given mountain is in the range
+    return std::find(it->second.begin(), it->second.end(), mountain) != it->second.end();
 }

@@ -50,16 +50,15 @@ int main()
     // create a Mountains object
     Mountains mountains(filenames);
 
-    int score = 0; // keep track of the user's score
+    int correctScore = 0; // keep track of the user's correct answers
+    int incorrectScore = 0; // keep track of the users wrong answers
     int questions = 0; // keep track of the number of questions asked
     std::string mountain; // mountain name
     std::string range; // mountain range
     std::vector<std::pair<std::string, double>> correct_answers; // keep track of correct answers and their response times
-
+    std::vector<std::pair<std::string, double>> incorrect_answers; // keep track of correct answers and their response times
     std::atomic<bool> timed_out(false); // flag to indicate if the user has timed out
-
     
-
     while (true)
     {
         // get a random mountain name
@@ -98,16 +97,20 @@ int main()
             // check if the mountain belongs to the specified range
             if (mountains.checkRange(mountain, range)) {
                 std::cout << "\nCorrect, " << mountain << " is in the " << range << " range.\n";
-                score++;
+                correctScore++;
 
                 // store correct answer and response time in the vector
                 correct_answers.push_back(std::make_pair(mountain, response_time));
             }
             else {
                 std::cout << "\nIncorrect, " << mountain << " is not in the " << range << " range.\n";
+                incorrectScore++;
+
+                // store incorrect answer and response time in the vector
+                incorrect_answers.push_back(std::make_pair(mountain, response_time));
             }
         }
-        std::cout << "Your score is " << score << "/" << questions << ".\n";
+        std::cout << "Your score is " << correctScore << "/" << questions << ".\n";
     }
 
     // print out the user's results
@@ -116,19 +119,31 @@ int main()
     std::cout << "----------------------------------------\n";
     std::cout << "Player Name: " << playerName << "\n";
     std::cout << "Total questions asked: " << questions << "\n";
-    std::cout << "Total correct answers: " << score << "\n";
-    std::cout << "Percentage correct: " << (double)score / questions * 100 << "%\n";
+    std::cout << "Total correct answers: " << correctScore << "\n";
+    std::cout << "Total incorrect answers: " << incorrectScore << "\n";
+    std::cout << "Percentage correct: " << (double)correctScore / questions * 100 << "%\n";
+    std::cout << "Percentage incorrect: " << (double)incorrectScore / questions * 100 << "%\n";
 
-    // sort correct_answers vector by response time
-    std::sort(correct_answers.begin(), correct_answers.end(), [](const std::pair<std::string, double>& a, const std::pair<std::string, double>& b) {
+    // combine correct and incorrect answers into one vector
+    std::vector<std::pair<std::string, double>> all_answers(correct_answers);
+    all_answers.insert(all_answers.end(), incorrect_answers.begin(), incorrect_answers.end());
+
+    // sort all answers by response time
+    std::sort(all_answers.begin(), all_answers.end(), [](const std::pair<std::string, double>& a, const std::pair<std::string, double>& b) {
         return a.second < b.second;
         });
 
-    // print out correct answers and response times
-    std::cout << "\nCorrect answers and response times:\n";
+    // print out all answers in ascending order of response time
+    std::cout << "\nAll answers in ascending order of response time:\n";
     std::cout << "----------------------------------------\n";
-    for (auto& answer : correct_answers) {
-        std::cout << answer.first << ": " << answer.second << " seconds\n";
+    for (auto& answer : all_answers) {
+        std::cout << answer.first << ": " << answer.second << " seconds";
+        if (std::find(correct_answers.begin(), correct_answers.end(), answer) != correct_answers.end()) {
+            std::cout << " (Correct)\n";
+        }
+        else {
+            std::cout << " (Incorrect)\n";
+        }
     }
     std::cout << "----------------------------------------\n";
 

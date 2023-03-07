@@ -21,6 +21,7 @@ Mountains::Mountains(std::vector<std::string>& filenames)
         {
             // Check the value of filename and add the line string to the appropriate
             // mountain range vector
+            // add all mountains to a map 
 
             if (filename == "Alps.txt")
                 Alps.push_back(line);

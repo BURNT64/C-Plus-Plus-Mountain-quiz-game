@@ -7,7 +7,7 @@ using namespace std;
 class Mountains
 {
 	std::vector<std::string> mountains;
-	std::map<std::string, std::string> mountainRanges;
+	std::map <std::string, std::string>  mountainRanges;
 	std::vector<std::string> Alps;
 	std::vector<std::string> Icelandic_Highlands;
 	std::vector<std::string> Carpathians;

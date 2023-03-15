@@ -132,15 +132,15 @@ int main()
     all_answers.insert(all_answers.end(), incorrect_answers.begin(), incorrect_answers.end());
 
     // sort all answers by response time
-    std::sort(all_answers.begin(), all_answers.end(), [](const std::pair<std::string, double>& a, const std::pair<std::string, double>& b) 
+    std::sort(all_answers.begin(), all_answers.end(), [](const std::pair<std::string, double>& a, const std::pair<std::string, double>& b)
         {
-        return a.second < b.second;
+            return a.second < b.second;
         });
 
     // print out all answers in ascending order of response time
     std::cout << "\nAll answers in ascending order of response time:\n";
     std::cout << "----------------------------------------\n";
-    for (auto& answer : all_answers) 
+    for (auto& answer : all_answers)
     {
         std::cout << answer.first << ": " << answer.second << " seconds";
         if (std::find(correct_answers.begin(), correct_answers.end(), answer) != correct_answers.end()) {
@@ -149,30 +149,22 @@ int main()
         else {
             std::cout << " (Incorrect)\n";
         }
-        std::cout << "----------------------------------------\n";
-
-        std::ofstream outputFile;
-        outputFile.open("results.csv");
-        outputFile << "Player Name,  Correct Answers,  Incorrect Answers,  Response Time (s)\n";
-        // Write the answer, along with the response time, to the CSV file
-        outputFile << playerName << ",  " << correctScore << ",  " << incorrectScore << ",  " << answer.second << "\n";
-        outputFile.close();
-
-        std::cout << "\nResults written to CSV file." << std::endl;
-
-        bool play_again = true;
-
-        while (play_again) {
-            // your existing code for the quiz loop goes here
-
-            std::cout << "Do you want to play again? (y/n) ";
-            char play_again_input;
-            std::cin >> play_again_input;
-
-            play_again = (play_again_input == 'y' || play_again_input == 'Y');
-        }
-        std::cout << "Thank you for playing!" << std::endl;
-
-        return 0;
     }
+    std::cout << "----------------------------------------\n";
+
+    // Write the results to the CSV file
+    std::ofstream outputFile;
+    outputFile.open("results.csv", std::ios::app);
+    outputFile << "Player Name, Correct Answers, Incorrect Answers, Response Time (s)\n";
+    for (size_t i = 0; i < all_answers.size(); ++i)
+    {
+        outputFile << playerName << ", " << correctScore << ", " << incorrectScore << ", " << all_answers[i].second << "\n";
+    }
+    outputFile.close();
+
+
+    std::cout << "Results written into CSV file" << std::endl;
+    std::cout << "Thank you for playing!" << std::endl;
+
+    return 0;
 }

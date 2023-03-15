@@ -6,8 +6,11 @@
 #include <vector>
 #include <algorithm>
 #include <thread>
+#include <map>
+#include <iomanip>
 
 using namespace std;
+
 
 int main()
 {
@@ -58,7 +61,7 @@ int main()
     std::vector<std::pair<std::string, double>> correct_answers; // keep track of correct answers and their response times
     std::vector<std::pair<std::string, double>> incorrect_answers; // keep track of correct answers and their response times
     std::atomic<bool> timed_out(false); // flag to indicate if the user has timed out
-    
+
     while (true)
     {
         // get a random mountain name
@@ -149,14 +152,12 @@ int main()
 
     std::ofstream outputFile;
     outputFile.open("results.csv");
-    outputFile << "Mountain,Response Time,Player name\n";
-    for (auto answer : correct_answers) {
-        outputFile << answer.first << "," << answer.second << "," << playerName << "\n";
-    }
+    outputFile << "Player Name, Correct Answers, Incorrect Answers\n";
+    outputFile << playerName << ",   " << correctScore << ",   " << incorrectScore << "\n";
     outputFile.close();
 
-
-    std::cout << "\nThank you for playing" << endl;
+    std::cout << "\nResults written to CSV file." << std::endl;
+    std::cout << "Thank you for playing!" << std::endl;
 
     return 0;
 }

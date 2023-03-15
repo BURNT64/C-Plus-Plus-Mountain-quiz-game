@@ -152,19 +152,41 @@ int main()
     }
     std::cout << "----------------------------------------\n";
 
-    // Write the results to the CSV file
+
+    std::ifstream inputFile;
+    inputFile.open("results.csv");
+    if (inputFile.peek() == std::ifstream::traits_type::eof()) {
+        // Write the header line if the file is empty
+        std::ofstream outputFile;
+        outputFile.open("results.csv", std::ios::app);
+        outputFile << "Player Name, Correct Answers, Incorrect Answers, Response Time (s)\n";
+        outputFile.close();
+    }
+    else {
+        // Check if the header line has already been written
+        std::string firstLine;
+        std::getline(inputFile, firstLine);
+        if (firstLine != "Player Name, Correct Answers, Incorrect Answers, Response Time (s)") {
+            // Write the header line if it hasn't been written yet
+            inputFile.close();
+            std::ofstream outputFile;
+            outputFile.open("results.csv", std::ios::app);
+            outputFile.seekp(0, std::ios::beg);
+            outputFile << "Player Name, Correct Answers, Incorrect Answers, Response Time (s)\n";
+            outputFile.close();
+        }
+        inputFile.close();
+    }
+
+    // Write data to the file
     std::ofstream outputFile;
     outputFile.open("results.csv", std::ios::app);
-    outputFile << "Player Name, Correct Answers, Incorrect Answers, Response Time (s)\n";
-    for (size_t i = 0; i < all_answers.size(); ++i)
-    {
+    for (size_t i = 0; i < all_answers.size(); ++i) {
         outputFile << playerName << ", " << correctScore << ", " << incorrectScore << ", " << all_answers[i].second << "\n";
     }
     outputFile.close();
-
-
+   
     std::cout << "Results written into CSV file" << std::endl;
     std::cout << "Thank you for playing!" << std::endl;
-
     return 0;
 }

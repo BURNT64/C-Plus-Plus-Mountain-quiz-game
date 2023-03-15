@@ -14,6 +14,19 @@ using namespace std;
 
 int main()
 {
+    std::vector<std::string> filenames = { "Alps.txt", "Carpathians.txt", "Icelandic Highlands.txt", "Pyrenees.txt" };
+    // create a Mountains object
+    Mountains mountains(filenames);
+
+    int correctScore = 0; // keep track of the user's correct answers
+    int incorrectScore = 0; // keep track of the users wrong answers
+    int questions = 0; // keep track of the number of questions asked
+    std::string mountain; // mountain name
+    std::string range; // mountain range
+    std::vector<std::pair<std::string, double>> correct_answers; // keep track of correct answers and their response times
+    std::vector<std::pair<std::string, double>> incorrect_answers; // keep track of correct answers and their response times
+    std::atomic<bool> timed_out(false); // flag to indicate if the user has timed out
+
     cout << "---------------------------------------------------------------\n";
     cout << "Guess the random mountain!!!! Created by Will Allwood 2022-2023\n";
     cout << "---------------------------------------------------------------\n\n";
@@ -48,19 +61,6 @@ int main()
         cout << "Thats a shame... come back when you are ready to play" << endl;
         return 0;
     }
-
-    std::vector<std::string> filenames = { "Alps.txt", "Carpathians.txt", "Icelandic Highlands.txt", "Pyrenees.txt" };
-    // create a Mountains object
-    Mountains mountains(filenames);
-
-    int correctScore = 0; // keep track of the user's correct answers
-    int incorrectScore = 0; // keep track of the users wrong answers
-    int questions = 0; // keep track of the number of questions asked
-    std::string mountain; // mountain name
-    std::string range; // mountain range
-    std::vector<std::pair<std::string, double>> correct_answers; // keep track of correct answers and their response times
-    std::vector<std::pair<std::string, double>> incorrect_answers; // keep track of correct answers and their response times
-    std::atomic<bool> timed_out(false); // flag to indicate if the user has timed out
 
     while (true)
     {
@@ -132,14 +132,16 @@ int main()
     all_answers.insert(all_answers.end(), incorrect_answers.begin(), incorrect_answers.end());
 
     // sort all answers by response time
-    std::sort(all_answers.begin(), all_answers.end(), [](const std::pair<std::string, double>& a, const std::pair<std::string, double>& b) {
+    std::sort(all_answers.begin(), all_answers.end(), [](const std::pair<std::string, double>& a, const std::pair<std::string, double>& b) 
+        {
         return a.second < b.second;
         });
 
     // print out all answers in ascending order of response time
     std::cout << "\nAll answers in ascending order of response time:\n";
     std::cout << "----------------------------------------\n";
-    for (auto& answer : all_answers) {
+    for (auto& answer : all_answers) 
+    {
         std::cout << answer.first << ": " << answer.second << " seconds";
         if (std::find(correct_answers.begin(), correct_answers.end(), answer) != correct_answers.end()) {
             std::cout << " (Correct)\n";
@@ -147,17 +149,30 @@ int main()
         else {
             std::cout << " (Incorrect)\n";
         }
+        std::cout << "----------------------------------------\n";
+
+        std::ofstream outputFile;
+        outputFile.open("results.csv");
+        outputFile << "Player Name,  Correct Answers,  Incorrect Answers,  Response Time (s)\n";
+        // Write the answer, along with the response time, to the CSV file
+        outputFile << playerName << ",  " << correctScore << ",  " << incorrectScore << ",  " << answer.second << "\n";
+        outputFile.close();
+
+        std::cout << "\nResults written to CSV file." << std::endl;
+
+        bool play_again = true;
+
+        while (play_again) {
+            // your existing code for the quiz loop goes here
+
+            std::cout << "Do you want to play again? (y/n) ";
+            char play_again_input;
+            std::cin >> play_again_input;
+
+            play_again = (play_again_input == 'y' || play_again_input == 'Y');
+        }
+        std::cout << "Thank you for playing!" << std::endl;
+
+        return 0;
     }
-    std::cout << "----------------------------------------\n";
-
-    std::ofstream outputFile;
-    outputFile.open("results.csv");
-    outputFile << "Player Name, Correct Answers, Incorrect Answers\n";
-    outputFile << playerName << ",   " << correctScore << ",   " << incorrectScore << "\n";
-    outputFile.close();
-
-    std::cout << "\nResults written to CSV file." << std::endl;
-    std::cout << "Thank you for playing!" << std::endl;
-
-    return 0;
 }

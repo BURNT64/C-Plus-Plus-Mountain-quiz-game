@@ -6,6 +6,7 @@ using namespace std;
 
 class Functions
 {
+public:
 	void printIntroduction(const std::string& playerName);
 	std::string getUserResponse();
 	void printRangePrompt(const std::string& mountain);

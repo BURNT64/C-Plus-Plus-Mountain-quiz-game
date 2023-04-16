@@ -21,7 +21,7 @@
     <ClCompile Include="Mountains.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Tests (DONOTEDIT).cpp">
+    <ClCompile Include="Tests.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

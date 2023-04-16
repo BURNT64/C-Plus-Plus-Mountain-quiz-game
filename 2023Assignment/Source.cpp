@@ -27,6 +27,7 @@ int main()
     std::vector<std::pair<std::string, double>> incorrect_answers; // keep track of correct answers and their response times
     std::atomic<bool> timed_out(false); // flag to indicate if the user has timed out
 
+
     cout << "---------------------------------------------------------------\n";
     cout << "Guess the random mountain!!!! Created by Will Allwood 2022-2023\n";
     cout << "---------------------------------------------------------------\n\n";

@@ -11,7 +11,6 @@
 
 using namespace std;
 
-
 int main()
 {
     std::vector<std::string> filenames = { "Alps.txt", "Carpathians.txt", "Icelandic Highlands.txt", "Pyrenees.txt" };

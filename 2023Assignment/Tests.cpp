@@ -1,10 +1,11 @@
 #include "Mountains.h"
 #include <thread>
 #include <map>
-
-#define BOOST_TEST_MODULE mytests
 #include <boost/test/included/unit_test.hpp>
 #include <boost/test/data/test_case.hpp>
+
+#define BOOST_TEST_MODULE mytests
+
 namespace bdata = boost::unit_test::data;
 
 BOOST_AUTO_TEST_SUITE(MountainsTestSuite)
@@ -27,6 +28,15 @@ BOOST_AUTO_TEST_CASE(TestGetRandomMountain)
     BOOST_REQUIRE(mountain1 != "");
     BOOST_REQUIRE(mountain2 != "");
     BOOST_REQUIRE(mountain1 != mountain2);
+}
+
+// Test getRandomMountain method with empty filenames vector
+BOOST_AUTO_TEST_CASE(TestGetRandomMountainWithEmptyFilenames)
+{
+    std::vector<std::string> filenames = {};
+    Mountains mountains(filenames);
+    std::string mountain = mountains.getRandomMountain();
+    BOOST_REQUIRE(mountain == "");
 }
 
 BOOST_AUTO_TEST_CASE(TestCheckRange)

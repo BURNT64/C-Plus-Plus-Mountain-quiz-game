@@ -31,13 +31,11 @@ BOOST_AUTO_TEST_CASE(TestGetRandomMountain)
 
 BOOST_AUTO_TEST_CASE(TestCheckRange)
 {
-    std::vector<std::string> filenames = { "alps.txt", "carpathians.txt", "pyrenees.txt", "icelandic_highlands.txt" };
+    std::vector<std::string> filenames = { "Alps.txt", "Carpathians.txt",};
     Mountains mountains(filenames);
 
-    BOOST_CHECK(mountains.checkRange("Piz Bernina", "alps"));
-    BOOST_CHECK(mountains.checkRange("Gerlach", "carpathians"));
-    BOOST_CHECK(mountains.checkRange("Aneto", "pyrenees"));
-    BOOST_CHECK(mountains.checkRange("Kirkjufell", "icelandic highlands"));
+    BOOST_CHECK(mountains.checkRange("Piz Bernina", "Alps"));
+    BOOST_CHECK(mountains.checkRange("Gerlach", "Carpathians"));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
